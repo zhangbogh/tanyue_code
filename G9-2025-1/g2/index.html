@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>游戏开始</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        /* 标题页样式 */
+        #title-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            opacity: 1;
+            transition: opacity 1s ease;
+        }
+        
+        #title-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        #game-title {
+            color: white;
+            font-size: 64px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        
+        #game-subtitle {
+            color: white;
+            font-size: 32px;
+            font-style: italic;
+            text-align: center;
+            opacity: 0.8;
+        }
+        
+        #start-game-btn {
+            background-color: rgba(0, 123, 255, 0.8);
+            color: white;
+            font-size: 24px;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 40px;
+            transition: background-color 0.3s ease;
+        }
+        
+        #start-game-btn:hover {
+            background-color: rgba(0, 123, 255, 1);
+        }
+        
+        #video-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: black;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #start-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        #click-prompt {
+            position: absolute;
+            bottom: 50px;
+            color: white;
+            font-size: 24px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            text-align: center;
+            width: 100%;
+        }
+        
+        #click-prompt.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- 游戏介绍页 -->
+    <div id="title-screen">
+        <div style="text-align: center; color: white; max-width: 800px; padding: 20px;">
+            <h1 id="game-title" style="font-size: 64px; font-weight: bold; margin-bottom: 20px; text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);">工业崛起</h1>
+            <p id="game-subtitle" style="font-size: 32px; font-style: italic; opacity: 0.8; margin-bottom: 40px;">Industrial Uprising</p>
+            
+            <div style="background: rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 20px; margin-bottom: 30px; text-align: left; max-height: 300px; overflow-y: auto;">
+                <h3 style="color: #3498db; margin-top: 0;">游戏概述</h3>
+                <p style="line-height: 1.6;">《工业崛起》是一款工业建设与资源管理模拟游戏，玩家将扮演一位工业巨头，负责建设和管理一个完整的工业体系。游戏从1950年开始，玩家需要通过合理规划工厂布局、建设各类基础设施和生产设施，来发展壮大自己的工业帝国。</p>
+                
+                <h3 style="color: #3498db; margin-top: 20px;">核心玩法</h3>
+                <ul style="line-height: 1.6; margin: 0; padding-left: 20px;">
+                    <li>建设完整的工业链，从资源采集到加工生产</li>
+                    <li>管理能源系统，确保生产设施正常运行</li>
+                    <li>关注市场供需，制定合理的销售策略</li>
+                    <li>应对各种随机事件，做出明智决策</li>
+                    <li>随着时间发展，解锁新技术和新建筑</li>
+                </ul>
+            </div>
+            
+            <button id="start-game-btn" style="background-color: rgba(0, 123, 255, 0.8); color: white; font-size: 24px; padding: 15px 40px; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease;">
+                开始游戏
+            </button>
+        </div>
+    </div>
+    
+    <div id="video-container">
+        <video id="start-video" playsinline muted>
+            <source src="gcwj/st.mp4" type="video/mp4">
+            您的浏览器不支持视频播放。
+        </video>
+    </div>
+    <div id="click-prompt">点击页面继续</div>
+    
+    <script>
+        // 初始化DOM元素
+        const titleScreen = document.getElementById('title-screen');
+        const video = document.getElementById('start-video');
+        const clickPrompt = document.getElementById('click-prompt');
+        const container = document.getElementById('video-container');
+        const startGameBtn = document.getElementById('start-game-btn');
+        
+        // 检查视频文件是否可访问
+        fetch('gcwj/st.mp4')
+            .then(response => {
+                if (response.ok) {
+                    console.log('视频文件可访问');
+                } else {
+                    console.error('视频文件无法访问，HTTP状态码:', response.status);
+                }
+            })
+            .catch(error => {
+                console.error('获取视频文件失败:', error);
+            });
+        
+        // 添加视频事件监听器进行调试
+        video.addEventListener('loadstart', () => console.log('视频开始加载'));
+        video.addEventListener('loadedmetadata', () => console.log('视频元数据加载完成'));
+        video.addEventListener('loadeddata', () => console.log('视频数据加载完成'));
+        video.addEventListener('canplay', () => console.log('视频可以开始播放'));
+        video.addEventListener('play', () => console.log('视频开始播放'));
+        video.addEventListener('playing', () => console.log('视频正在播放'));
+        video.addEventListener('pause', () => console.log('视频暂停'));
+        video.addEventListener('error', (e) => console.error('视频错误:', e));
+        
+        // 控制是否可以点击跳转
+        let canJump = false;
+        
+        // 创建背景音乐对象（全局范围）
+        const backgroundMusic = new Audio('gcwj/hoi4mainthemeallies.ogg');
+        backgroundMusic.loop = true;
+        backgroundMusic.volume = 0.8;
+        
+        // 页面加载完成后立即尝试播放音乐（显示游戏名字时开始）
+        window.addEventListener('DOMContentLoaded', () => {
+            // 尝试在页面加载后立即播放音乐
+            backgroundMusic.play().then(() => {
+                console.log('背景音乐在标题页显示时开始播放');
+            }).catch(error => {
+                console.log('背景音乐自动播放失败（浏览器限制）:', error);
+                // 不显示提示，尝试其他自动播放方法
+            });
+        });
+        
+        // 尝试在视频开始播放时同步播放音乐
+        video.addEventListener('play', () => {
+            if (backgroundMusic.paused) {
+                backgroundMusic.play().catch(error => {
+                    console.log('视频播放时尝试播放音乐失败:', error);
+                });
+            }
+        });
+        
+        // 尝试在用户有任何交互时播放音乐（如鼠标移动、点击等）
+        ['click', 'mousemove', 'keydown', 'touchstart'].forEach(eventType => {
+            document.body.addEventListener(eventType, () => {
+                if (backgroundMusic.paused) {
+                    backgroundMusic.play().catch(error => {
+                        console.log('用户交互时尝试播放音乐失败:', error);
+                    });
+                }
+            }, { once: true }); // 只触发一次
+        });
+        
+        // 点击开始游戏按钮后隐藏标题页并开始播放视频和音乐
+        startGameBtn.addEventListener('click', () => {
+            console.log('点击了开始游戏按钮');
+            
+            // 隐藏标题页
+            titleScreen.classList.add('hidden');
+            
+            // 开始播放视频
+            if (video.readyState >= 3) { // HAVE_FUTURE_DATA
+                console.log('视频已准备好播放，readyState:', video.readyState);
+                video.play().then(() => {
+                    console.log('视频播放成功');
+                }).catch(error => {
+                    console.error('视频播放失败:', error);
+                });
+            } else {
+                console.log('视频未准备好，等待canplay事件...');
+                // 如果视频还没准备好，等待canplay事件
+                video.addEventListener('canplay', () => {
+                    console.log('视频触发canplay事件，开始播放');
+                    video.play().then(() => {
+                        console.log('视频在canplay事件中播放成功');
+                    }).catch(error => {
+                        console.error('视频在canplay事件中播放失败:', error);
+                    });
+                }, { once: true });
+            }
+            
+            // 开始播放音乐
+            try {
+                bgm.play();
+                console.log('音乐播放成功');
+            } catch (error) {
+                console.error('音乐播放失败:', error);
+            }
+            
+            // 取消视频静音
+            setTimeout(() => {
+                if (video.muted) {
+                    video.muted = false;
+                    console.log('视频已取消静音');
+                }
+            }, 1000);
+        });
+        
+        // 15秒后允许点击跳转
+        setTimeout(() => {
+            canJump = true;
+        }, 15000);
+        
+        // 视频结束时显示点击提示
+        video.addEventListener('ended', () => {
+            clickPrompt.classList.add('show');
+            container.style.cursor = 'pointer';
+        });
+        
+        // 点击事件处理：确保音乐在播放并处理跳转
+        document.body.addEventListener('click', (e) => {
+            // 确保音乐在播放
+            if (backgroundMusic.paused) {
+                backgroundMusic.play().then(() => {
+                    console.log('背景音乐在点击时开始播放');
+                }).catch(error => {
+                    console.log('背景音乐点击播放失败:', error);
+                });
+            }
+            
+            // 处理跳转
+            if (canJump) {
+                window.location.href = 'gcwj/xuanze.html';
+            }
+        });
+        
+        // 禁止右键菜单
+        document.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+        });
+    </script>
+</body>
+</html>

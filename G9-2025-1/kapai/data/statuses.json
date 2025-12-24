@@ -1,0 +1,52 @@
+{
+  "statuses": [
+    {
+      "id": "weak",
+      "name": "虚弱",
+      "type": "debuff",
+      "effect": { "damage_mult": 0.8 },
+      "duration_type": "turns_per_stack",
+      "base_duration": 1,
+      "stacking": "duration_only",
+      "max_stacks": null
+    },
+    {
+      "id": "frail",
+      "name": "脆弱",
+      "type": "debuff",
+      "effect": { "block_gain_mult": 0.5 },
+      "duration_type": "turns_per_stack",
+      "base_duration": 1,
+      "stacking": "duration_only",
+      "max_stacks": null
+    },
+    {
+      "id": "strength",
+      "name": "力量",
+      "type": "buff",
+      "effect": { "damage_bonus_per_stack_pct": 5 },
+      "max_stacks": 10,
+      "persists_through_turns": true,
+      "cleared_on_battle_end": true
+    },
+    {
+      "id": "toughness",
+      "name": "坚韧",
+      "type": "buff",
+      "effect": { "block_gain_bonus_per_stack_pct": 10 },
+      "max_stacks": 5,
+      "persists_through_turns": true,
+      "cleared_on_battle_end": true
+    }
+  ],
+  "enemy_actions": {
+    "buff": [
+      { "id": "enrage", "apply": { "strength": 1 } },
+      { "id": "fortify", "apply": { "toughness": 1 } }
+    ],
+    "debuff": [
+      { "id": "sap", "apply": { "weak": 1 }, "target": "player" },
+      { "id": "shatter", "apply": { "frail": 1 }, "target": "player" }
+    ]
+  }
+}

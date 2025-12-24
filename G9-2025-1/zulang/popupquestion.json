@@ -1,0 +1,121 @@
+
+
+
+
+
+
+{
+  
+  "questions": [
+    {
+      "title": "问题挑战！",
+      "content": "刘邦在鸿门宴上借什么理由逃脱？",
+      "options": ["换衣服", "亲人生病", "上厕所", "礼物忘带了"],
+      "correctAnswer": 2,
+      "explanation": "",
+      "subject": "历史"
+    },
+
+{
+      "title": "问题挑战！",
+      "content": "据野史记载，李白死因与什么有关？",
+      "options": ["喝酒", "水中捞月", "政治迫害", "生病"],
+      "correctAnswer": 1,
+      "explanation": "",
+      "subject": "历史"
+    },
+
+
+{
+      "title": "问题挑战！",
+      "content": "苏轼被贬期间发明了什么著名美食？",
+      "options": ["东坡肉", "粽子", "江米扣肉", "红烧肉"],
+      "correctAnswer": 0,
+      "explanation": "",
+      "subject": "历史"
+    },
+{
+      "title": "问题挑战！",
+      "content": "慈禧太后每天吃多少个菜？每个菜吃几口？",
+      "options": ["120，1", "100，3", "108，2", "108，1"],
+      "correctAnswer": 3,
+      "explanation": "",
+      "subject": "历史"
+    },
+{
+      "title": "问题挑战！",
+      "content": "唐朝时期官员什么时候休息？",
+      "options": ["五日一休", "三日一休", "七日一休", "十日一休"],
+      "correctAnswer": 3,
+      "explanation": "",
+      "subject": "历史"
+    },
+{
+      "title": "问题挑战！",
+      "content": "郑和带回来的“麒麟”是什么动物？",
+      "options": ["长颈鹿", "蜥蜴", "刺猬", "猫"],
+      "correctAnswer": 0,
+      "explanation": "",
+      "subject": "历史"
+    },
+{
+      "title": "问题挑战！",
+      "content": "指南针最初是用来做什么的？",
+      "options": ["看风水", "航海", "玩具", "生火"],
+      "correctAnswer": 0,
+      "explanation": "",
+      "subject": "历史"
+    },
+
+    {
+      "title": "问题挑战！",
+      "content": "What has a heart that doesn't beat?",
+      "options": ["Deck of cards", "Painting", "Robot", "Computer"],
+      "correctAnswer": 0,
+      "explanation": "",
+      "subject": "英语"
+    },
+
+    {
+      "title": "问题挑战！",
+      "content": "I fly without wings, I cry without eyes. Wherever I go, darkness follows me. What am I?",
+      "options": ["Bat", "Dark cloud", "Sun", "Little bird"],
+      "correctAnswer": 1,
+      "explanation": "",
+      "subject": "英语"
+    },
+        {
+      "title": "问题挑战！",
+      "content": "I am always hungry, I must always be fed. The finger I touch, will soon turn red. What am I?",
+      "options": ["Desire", "Black hole", "Time", "Fire"],
+      "correctAnswer": 3,
+      "explanation": "",
+      "subject": "英语"
+    },
+    
+    {
+      "title": "问题挑战！",
+      "content": "村里理发师宣布：“我只给村里所有不自己刮胡子的人刮胡子。”请问：理发师给自己刮胡子吗？",
+      "options": ["刮", "不刮", "矛盾", "有时刮有时不"],
+      "correctAnswer": 2,
+      "explanation": "逻辑推理",
+      "subject": "数学"
+    },    
+    {
+      "title": "问题挑战！",
+      "content": "无限房间的旅馆住满了无限个客人，又来了无限个新客人，怎么办？",
+      "options": ["让1号房客人搬到2号，2号搬到4号...", "让客人挤一挤", "拒绝入住", "让老顾客走"],
+      "correctAnswer": 0,
+      "explanation": "逻辑",
+      "subject": "数学"
+    },
+    {
+      "title": "问题挑战！",
+      "content": "微积分是由谁独立发明的？",
+      "options": ["阿基米德", "牛顿", "牛顿和莱布尼茨独立发明", "莱布尼茨"],
+      "correctAnswer": 2,
+      "explanation": "逻辑",
+      "subject": "数学"
+    }
+  ]
+}

@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>单词尖塔|spill the spire</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="kaishi.css">
+  </head>
+  <body>
+    <main class="layout">
+      <!-- 中部：战斗动画区域 -->
+      <section id="battleArea" class="panel battle-area">
+        <div id="effectsLayer" class="effects-layer"></div>
+        
+          <div class="combat-grid">
+            <!-- 左侧：玩家 -->
+            <div class="combatant player">
+              <div id="playerAvatar" class="avatar avatar-square"></div>
+              <div id="playerHpStage" class="hp-bar under">
+                <div id="playerHpStageBar" class="hp-fill"></div>
+                <div id="playerBlockOverlay" class="block-overlay"></div>
+                <div class="bar-numbers">HP <span id="playerHpTextStage">-</span></div>
+              </div>
+            </div>
+            <!-- 右侧：敌人 -->
+            <div class="combatant enemy">
+              <div id="enemyAvatar" class="avatar avatar-square">
+                <div id="enemyIntentIcon" class="intent-icon" title="意图：—">?</div>
+              </div>
+              <div id="enemyHpStage" class="hp-bar under">
+                <div id="enemyHpStageBar" class="hp-fill"></div>
+                <div id="enemyBlockOverlay" class="block-overlay"></div>
+                <div class="bar-numbers">HP <span id="enemyHpTextStage">-</span></div>
+              </div>
+              <div id="enemyIntentText" class="intent-text">—</div>
+              </div>
+          </div>
+          <!-- 牌堆计数 -->
+          <div class="stacks">
+            <div id="drawStack" class="stack draw" title="抽牌堆">
+              <div class="count" id="drawStackCount">0</div>
+            </div>
+            <div id="discardStack" class="stack discard" title="弃牌堆">
+              <div class="count" id="discardStackCount">0</div>
+            </div>
+          </div>
+          <!-- 左侧能量面板（响应式） -->
+          <div id="energyPanel" class="energy-panel">
+            <div class="energy-number" id="energyPanelCount">3</div>
+            <div class="energy-icon"></div>
+            <div class="energy-label">ENERGY</div>
+          </div>
+        <div id="comboPanel" class="combo-panel hidden">
+          <div class="combo-word"></div>
+          <div class="combo-meaning"></div>
+        </div>
+      </section>
+
+      <!-- 侧边：玩家状态、牌堆信息 -->
+      <aside id="sidebar" class="panel sidebar">
+        <button id="btnToggleSidebar" class="sidebar-toggle" title="收起/展开右侧栏">≪</button>
+        <div class="progress-info">
+          <div>已掌握词素：<span id="statsMorphemes">0</span></div>
+          <div>已组合单词：<span id="statsWords">0</span></div>
+        </div>
+        <hr />
+        <div class="word-guide" id="wordGuide">
+          <div class="guide-title">单词效果与可用组合</div>
+          <div class="guide-list" id="wordGuideList"></div>
+          <div class="guide-actions">
+            <button id="btnOpenCompendium" class="secondary" title="查看所有卡牌与组合">卡牌图鉴</button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- 底部：玩家手牌区域 -->
+      <section id="handArea" class="panel hand-area">
+        <div class="hand-link-bar">
+          <button id="btnLinkCombo" class="secondary" title="选择多张牌进行链接并打出">链接组合</button>
+        </div>
+        <div id="hand" class="hand"></div>
+        <div class="controls">
+          <button id="btnEndTurn" class="primary">结束回合</button>
+          <button id="btnSkipBattle" class="secondary" title="测试：直接结束当前战斗">跳过战斗</button>
+        </div>
+      </section>
+    </main>
+
+    <!-- 地图界面（节点式爬塔） -->
+    <section id="mapView" class="panel map-view hidden">
+      <div id="mapGoldDisplay" class="map-gold-display">
+        <img src="styles/coin.png" class="gold-icon" alt="Gold">
+        <span id="mapGoldCount">0</span>
+      </div>
+      <div id="towerMap" class="tower-map"></div>
+      <aside class="map-legend">
+        <div class="legend-title">图例</div>
+        <div class="legend-item"><span class="icon fight">⚔️</span><span>战斗</span></div>
+        <div class="legend-item"><span class="icon event">?</span><span>事件</span></div>
+        <div class="legend-item"><span class="icon rest">🔥</span><span>休息</span></div>
+        <div class="legend-item"><span class="icon shop">🛍️</span><span>商店</span></div>
+        <div class="legend-item"><span class="icon elite">💀</span><span>精英</span></div>
+        <div class="legend-item"><span class="icon boss">👑</span><span>Boss</span></div>
+      </aside>
+      <button id="mapEventTestBtn" class="map-event-test">事件测试</button>
+    </section>
+
+
+    <!-- 弃牌选择弹窗：移到 body 层级，避免受战斗区域定位与溢出影响 -->
+    <div id="discardPicker" class="modal hidden">
+      <div class="modal-content">
+        <div id="discardPickerCancelIcon" class="modal-corner-cancel" title="取消"></div>
+        <div class="modal-title">从弃牌堆选择一张牌抽回</div>
+        <div id="discardList" class="modal-list"></div>
+        <div class="modal-actions">
+          <button id="discardClose" class="primary">取消</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 牌堆顶查看/选择弹窗：portion 组合使用 -->
+    <div id="drawPeekPicker" class="modal hidden">
+      <div class="modal-content">
+        <div id="drawPeekCancelIcon" class="modal-corner-cancel" title="取消"></div>
+        <div class="modal-title">从牌堆顶的 5 张中选择 1 张加入手牌（其余弃）</div>
+        <div id="drawPeekList" class="modal-list"></div>
+        <div class="modal-actions">
+          <button id="drawPeekClose" class="primary">取消</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 卡牌图鉴弹窗：展示所有卡牌与所有组合（分开） -->
+    <div id="compendiumModal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-title">卡牌图鉴</div>
+        <div class="modal-tabs">
+          <button id="tabCards" class="tab active" data-tab="cards">卡牌</button>
+          <button id="tabCombos" class="tab" data-tab="combos">组合</button>
+        </div>
+        <div id="compendiumCards" class="modal-list"></div>
+        <div id="compendiumCombos" class="modal-list hidden"></div>
+        <div class="modal-actions">
+          <button id="compendiumClose" class="primary">关闭</button>
+        </div>
+      </div>
+    </div>
+    <div id="restModal" class="modal campfire-modal hidden">
+      <div class="modal-content"></div>
+    </div>
+
+    <!-- 事件弹窗 -->
+    <div id="eventModal" class="modal event-modal hidden">
+      <div class="modal-content">
+        <div class="event-layout">
+          <div class="event-image-column">
+            <img id="eventImage" src="" alt="事件图片">
+          </div>
+          <div class="event-info-column">
+            <div class="event-text-area">
+              <div class="event-header-row">
+                <div class="modal-title" id="eventTitle">事件标题</div>
+                <div class="event-player-stats" id="eventPlayerStats">
+                  HP: <span id="eventPlayerHp">80</span>/<span id="eventPlayerMaxHp">80</span> · 金币: <span id="eventPlayerGold">0</span>
+                </div>
+              </div>
+              <div class="event-body" id="eventBody"></div>
+            </div>
+            <div class="event-options" id="eventOptions"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 弃牌堆查看弹窗（只读）：点击手牌区右下入口打开 -->
+    <div id="discardViewer" class="modal hidden">
+      <div class="modal-content">
+        <div id="discardViewerCancelIcon" class="modal-corner-cancel" title="关闭"></div>
+        <div class="modal-title">弃牌堆</div>
+        <div id="discardViewerList" class="modal-list"></div>
+        <div class="modal-actions">
+          <button id="discardViewerClose" class="primary">关闭</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 移除卡牌选择弹窗 -->
+    <div id="removeCardPicker" class="modal hidden">
+      <div class="modal-content">
+        <div id="removeCardCancelIcon" class="modal-corner-cancel" title="取消"></div>
+        <div class="modal-title">选择一张卡牌移除</div>
+        <div id="removeCardList" class="modal-list"></div>
+        <div class="modal-actions">
+          <button id="removeCardClose" class="primary">取消</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 事件测试选择弹窗 -->
+    <div id="eventTestPicker" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-title">选择一个事件参与</div>
+        <div id="eventTestList" class="modal-list"></div>
+        <div class="modal-actions">
+          <button id="eventTestClose" class="primary">取消</button>
+        </div>
+      </div>
+    </div>
+
+
+    <script src="js/config.js"></script>
+    <script src="js/logger.js"></script>
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>

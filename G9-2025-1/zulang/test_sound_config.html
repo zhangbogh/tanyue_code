@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>音效配置测试工具</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .event-item {
+            margin: 15px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .event-name {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        .event-description {
+            color: #7f8c8d;
+            margin-bottom: 10px;
+        }
+        .event-file {
+            font-family: monospace;
+            background-color: #ecf0f1;
+            padding: 3px 5px;
+            border-radius: 3px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        #config-display {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .status {
+            padding: 10px;
+            margin-top: 20px;
+            border-radius: 4px;
+        }
+        .status-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status-error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .status-loading {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>音效配置测试工具</h1>
+        
+        <div id="status" class="status status-loading">
+            正在加载音效配置...
+        </div>
+
+        <h2>音效事件列表</h2>
+        <div id="events-container">
+            <p>请稍候，正在加载音效事件...</p>
+        </div>
+
+        <h2>配置详情</h2>
+        <div id="config-display">
+            // 配置将显示在这里
+        </div>
+    </div>
+
+    <script src="soundManager.js"></script>
+    <script>
+        // 等待soundManager初始化完成
+        async function initTest() {
+            const statusElement = document.getElementById('status');
+            const eventsContainer = document.getElementById('events-container');
+            const configDisplay = document.getElementById('config-display');
+
+            try {
+                // 初始化音效管理器
+                await soundManager.init();
+                
+                // 更新状态
+                statusElement.textContent = '音效配置加载成功！';
+                statusElement.className = 'status status-success';
+
+                // 获取所有音效事件
+                const events = soundManager.getAllSoundEvents();
+                
+                if (events.length === 0) {
+                    eventsContainer.innerHTML = '<p>没有找到任何音效事件配置</p>';
+                } else {
+                    eventsContainer.innerHTML = '';
+                    events.forEach(event => {
+                        const eventItem = document.createElement('div');
+                        eventItem.className = 'event-item';
+                        
+                        const soundInfo = soundManager.getSoundInfo(event.type);
+                        
+                        eventItem.innerHTML = `
+                            <div class="event-name">事件: ${event.event}</div>
+                            <div class="event-description">${event.description}</div>
+                            <div>音效文件: <span class="event-file">${soundInfo?.file || '未知'}</span></div>
+                            <button onclick="playTestSound('${event.type}')">测试播放</button>
+                        `;
+                        
+                        eventsContainer.appendChild(eventItem);
+                    });
+                }
+
+                // 显示完整配置
+                configDisplay.textContent = JSON.stringify(soundManager.soundConfig, null, 2);
+
+            } catch (error) {
+                console.error('测试初始化失败:', error);
+                statusElement.textContent = '加载音效配置失败！';
+                statusElement.className = 'status status-error';
+                configDisplay.textContent = '错误: ' + error.message;
+            }
+        }
+
+        // 测试播放音效
+        function playTestSound(soundType) {
+            const success = soundManager.playSound(soundType);
+            if (!success) {
+                alert('播放音效失败，请检查控制台错误信息');
+            }
+        }
+
+        // 当页面加载完成时初始化测试
+        window.addEventListener('load', initTest);
+    </script>
+</body>
+</html>

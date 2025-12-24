@@ -1,0 +1,26 @@
+{  
+  "sounds": {
+    "correctAnswer": {
+      "event": "回答正确",
+      "file": "飞书20251201-160841.mp3",
+      "description": "当玩家回答问题正确时播放"
+    },
+    "incorrectAnswer": {
+      "event": "回答错误",
+      "file": "飞书20251202-230857.mp3",
+      "description": "当玩家回答问题错误时播放"
+    },
+    "questionBackground": {
+      "event": "答题背景音乐",
+      "file": "飞书20251203-090730.mp3",
+      "description": "当显示答题弹窗时播放的背景音乐"
+    },
+    "gameBackground": {
+      "event": "全局背景音乐",
+      "file": "飞书20251203-090726.mp3",
+      "description": "游戏游玩时的全局背景音乐"
+    }
+  },
+  "version": "1.0",
+  "lastUpdated": "2025-12-15"
+}

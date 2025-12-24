@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>项目导航与抽签轮盘</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "PingFang SC", "Microsoft YaHei", sans-serif; background: #0f172a; color: #e2e8f0; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 24px; display: grid; gap: 24px; }
+    .header { font-size: 22px; font-weight: 600; letter-spacing: 0.2px; }
+
+    .top-links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: start; }
+    .link-card { display: block; border-radius: 12px; overflow: hidden; background: #111827; border: 1px solid #1f2937; text-decoration: none; }
+    .link-card img { width: 100%; height: 180px; object-fit: cover; display: block; }
+    .link-card .label { padding: 12px; color: #f9fafb; font-weight: 600; text-align: center; }
+    .link-card:focus, .link-card:hover { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.25); }
+
+    .bottom { display: grid; grid-template-columns: minmax(320px, 1fr) 340px; gap: 16px; align-items: start; }
+    .wheel-wrap { position: relative; width: 340px; height: 340px; display: grid; place-items: center; }
+    #wheel { width: 320px; height: 320px; border-radius: 50%; border: 10px solid #1f2937; position: relative; transition: transform 2.2s cubic-bezier(0.23, 1, 0.32, 1); box-shadow: 0 10px 30px rgba(0,0,0,0.35), inset 0 0 40px rgba(255,255,255,0.03); }
+    #labels { position: absolute; inset: 0; display: block; }
+    .seg-label { position: absolute; left: 50%; top: 50%; transform-origin: center; color: #0f172a; font-weight: 700; font-size: 18px; }
+    .controls { display: grid; gap: 10px; justify-items: center; }
+    #spin, .btn { padding: 10px 18px; border-radius: 8px; border: 1px solid #334155; background: #2563eb; color: #fff; font-weight: 600; cursor: pointer; }
+    #spin:disabled { background: #475569; cursor: not-allowed; }
+    #result { min-height: 28px; font-size: 16px; }
+    .footer-note { color: #94a3b8; font-size: 13px; }
+    .timers { display: grid; gap: 14px; }
+    .timer-card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 14px; }
+    .timer-title { font-weight: 700; margin-bottom: 8px; }
+    .timer-time { font-variant-numeric: tabular-nums; font-size: 28px; font-weight: 700; letter-spacing: 1px; margin-bottom: 10px; }
+    .timer-controls { display: flex; gap: 8px; }
+    .btn.secondary { background: #0ea5e9; }
+    .btn.warn { background: #f59e0b; }
+    .btn.gray { background: #475569; }
+    @media (max-width: 800px) {
+      .bottom { grid-template-columns: 1fr; }
+      .timers { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">项目导航</div>
+    <div class="top-links">
+      <a class="link-card" href="./zulang/">
+        <img alt="组长" src="data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='360'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1' y1='0' y2='1'%3E%3Cstop offset='0' stop-color='%232563eb'/%3E%3Cstop offset='1' stop-color='%230ea5e9'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='600' height='360' fill='url(%23g)'/%3E%3Ctext x='300' y='190' font-size='64' font-family='system-ui,Arial' text-anchor='middle' fill='white'%3E%E7%BB%84%E9%95%BF%3C/text%3E%3C/svg%3E" />
+        <div class="label">组长目录</div>
+      </a>
+      <a class="link-card" href="./g2/">
+        <img alt="G2" src="data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='360'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1' y1='0' y2='1'%3E%3Cstop offset='0' stop-color='%238b5cf6'/%3E%3Cstop offset='1' stop-color='%23ec4899'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='600' height='360' fill='url(%23g)'/%3E%3Ctext x='300' y='190' font-size='72' font-family='system-ui,Arial' text-anchor='middle' fill='white'%3EG2%3C/text%3E%3C/svg%3E" />
+        <div class="label">G2目录</div>
+      </a>
+      <a class="link-card" href="./kapai/">
+        <img alt="卡牌" src="data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='360'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1' y1='0' y2='1'%3E%3Cstop offset='0' stop-color='%23f59e0b'/%3E%3Cstop offset='1' stop-color='%23f97316'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='600' height='360' fill='url(%23g)'/%3E%3Ctext x='300' y='190' font-size='64' font-family='system-ui,Arial' text-anchor='middle' fill='white'%3E%E5%8D%A1%E7%89%8C%3C/text%3E%3C/svg%3E" />
+        <div class="label">卡牌目录</div>
+      </a>
+    </div>
+
+    <div class="header">抽签轮盘</div>
+    <div class="bottom">
+      <div class="wheel-wrap">
+        <div id="wheel"></div>
+        <div id="labels"></div>
+      </div>
+      <div class="timers">
+        <div class="controls">
+          <button id="spin">抽取</button>
+          <div id="result"></div>
+          <div class="footer-note">每次抽中后会删除该名字</div>
+        </div>
+        <div class="timer-card">
+          <div class="timer-title">6分钟演讲</div>
+          <div class="timer-time" id="speech-time">06:00</div>
+          <div class="timer-controls">
+            <button class="btn secondary" id="speech-start">开始</button>
+            <button class="btn warn" id="speech-pause">暂停</button>
+            <button class="btn gray" id="speech-reset">重置</button>
+          </div>
+        </div>
+        <div class="timer-card">
+          <div class="timer-title">5分钟问答</div>
+          <div class="timer-time" id="qa-time">05:00</div>
+          <div class="timer-controls">
+            <button class="btn secondary" id="qa-start">开始</button>
+            <button class="btn warn" id="qa-pause">暂停</button>
+            <button class="btn gray" id="qa-reset">重置</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <audio id="alert-audio" src="kaka.mp3" preload="auto"></audio>
+
+  <script>
+    const names = ["组长","G2","卡牌"];
+    const palette = ["#fde68a","#93c5fd","#86efac","#fca5a5","#c4b5fd","#fcd34d"]; 
+    const wheel = document.getElementById("wheel");
+    const labels = document.getElementById("labels");
+    const spinBtn = document.getElementById("spin");
+    const resultEl = document.getElementById("result");
+    let currentRotation = 0;
+    let items = names.slice();
+
+    function buildGradient(list) {
+      const n = list.length;
+      if (n === 0) return "#111827";
+      const seg = 360 / n;
+      const stops = list.map((_, i) => {
+        const a0 = Math.round(i * seg);
+        const a1 = Math.round((i + 1) * seg);
+        const c = palette[i % palette.length];
+        return `${c} ${a0}deg ${a1}deg`;
+      });
+      return `conic-gradient(${stops.join(', ')})`;
+    }
+
+    function renderLabels(list) {
+      labels.innerHTML = "";
+      const n = list.length;
+      if (n === 0) return;
+      const seg = 360 / n;
+      for (let i = 0; i < n; i++) {
+        const mid = i * seg + seg / 2;
+        const d = 110;
+        const el = document.createElement("div");
+        el.className = "seg-label";
+        el.style.transform = `translate(-50%, -50%) rotate(${mid + currentRotation}deg) translate(${d}px) rotate(${-mid - currentRotation}deg)`;
+        el.textContent = list[i];
+        labels.appendChild(el);
+      }
+    }
+
+    function renderWheel() {
+      wheel.style.background = buildGradient(items);
+      renderLabels(items);
+    }
+
+    function pickRandomIndex(n) {
+      return Math.floor(Math.random() * n);
+    }
+
+    function spin() {
+      if (items.length === 0) return;
+      spinBtn.disabled = true;
+      const n = items.length;
+      const seg = 360 / n;
+      const idx = pickRandomIndex(n);
+      const targetAngle = 360 - (idx * seg + seg / 2);
+      const spins = 3 * 360;
+      const final = currentRotation + spins + targetAngle;
+      wheel.style.transform = `rotate(${final}deg)`;
+      const onEnd = () => {
+        currentRotation = final % 360;
+        const chosen = items[idx];
+        resultEl.textContent = `抽中：${chosen}`;
+        items = items.filter((v, i) => i !== idx);
+        renderWheel();
+        spinBtn.disabled = items.length === 0;
+        wheel.removeEventListener("transitionend", onEnd);
+      };
+      wheel.addEventListener("transitionend", onEnd);
+    }
+
+    spinBtn.addEventListener("click", spin);
+    renderWheel();
+
+    let audioCtx = null;
+    function getAudioCtx() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      return audioCtx;
+    }
+    function playFallbackBeep() {
+      const ctx = getAudioCtx();
+      const t = ctx.currentTime;
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = "sine";
+      o.frequency.setValueAtTime(880, t);
+      g.gain.setValueAtTime(0.001, t);
+      g.gain.exponentialRampToValueAtTime(0.2, t + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.4);
+      o.connect(g).connect(ctx.destination);
+      o.start(t);
+      o.stop(t + 0.42);
+      setTimeout(() => {
+        const o2 = ctx.createOscillator();
+        const g2 = ctx.createGain();
+        o2.type = "sine";
+        o2.frequency.setValueAtTime(660, ctx.currentTime);
+        g2.gain.setValueAtTime(0.001, ctx.currentTime);
+        g2.gain.exponentialRampToValueAtTime(0.2, ctx.currentTime + 0.02);
+        g2.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.4);
+        o2.connect(g2).connect(ctx.destination);
+        o2.start();
+        o2.stop(ctx.currentTime + 0.42);
+      }, 500);
+    }
+    function playAlertAudio(times = 3) {
+      const el = document.getElementById("alert-audio");
+      if (!el) { playFallbackBeep(); return; }
+      let count = 0;
+      el.currentTime = 0;
+      el.muted = false;
+      const playOnce = () => {
+        count += 1;
+        el.currentTime = 0;
+        const p = el.play();
+        if (p && typeof p.then === "function") {
+          p.catch(() => playFallbackBeep());
+        }
+      };
+      const onEnded = () => {
+        if (count < times) {
+          playOnce();
+        } else {
+          el.removeEventListener("ended", onEnded);
+        }
+      };
+      el.addEventListener("ended", onEnded);
+      playOnce();
+    }
+
+    function createTimer({timeEl, startBtn, pauseBtn, resetBtn, totalSeconds}) {
+      let remaining = totalSeconds;
+      let running = false;
+      let intervalId = null;
+      let warned = false;
+      function fmt(sec) {
+        const m = Math.floor(sec / 60).toString().padStart(2, "0");
+        const s = Math.floor(sec % 60).toString().padStart(2, "0");
+        return `${m}:${s}`;
+      }
+      function render() {
+        timeEl.textContent = fmt(remaining);
+      }
+      function tick() {
+        if (!running) return;
+        remaining -= 1;
+        if (!warned && remaining === 60) {
+          warned = true;
+          playAlertAudio(3);
+        }
+        if (remaining <= 0) {
+          remaining = 0;
+          render();
+          pause();
+          return;
+        }
+        render();
+      }
+      function start() {
+        if (running) return;
+        running = true;
+        warned = remaining <= 60 ? true : warned;
+        if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
+        intervalId = setInterval(tick, 1000);
+      }
+      function pause() {
+        running = false;
+        if (intervalId) clearInterval(intervalId);
+        intervalId = null;
+      }
+      function reset() {
+        pause();
+        remaining = totalSeconds;
+        warned = false;
+        render();
+      }
+      startBtn.addEventListener("click", () => { getAudioCtx(); start(); });
+      pauseBtn.addEventListener("click", pause);
+      resetBtn.addEventListener("click", reset);
+      render();
+      return { start, pause, reset };
+    }
+
+    const speechTimer = createTimer({
+      timeEl: document.getElementById("speech-time"),
+      startBtn: document.getElementById("speech-start"),
+      pauseBtn: document.getElementById("speech-pause"),
+      resetBtn: document.getElementById("speech-reset"),
+      totalSeconds: 8 * 60
+    });
+    const qaTimer = createTimer({
+      timeEl: document.getElementById("qa-time"),
+      startBtn: document.getElementById("qa-start"),
+      pauseBtn: document.getElementById("qa-pause"),
+      resetBtn: document.getElementById("qa-reset"),
+      totalSeconds: 5 * 60
+    });
+  </script>
+</body>
+</html>

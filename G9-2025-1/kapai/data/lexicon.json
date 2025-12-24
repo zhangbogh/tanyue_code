@@ -1,0 +1,31 @@
+{
+  "prefixes": [
+    { "id": "re", "type": "prefix", "text": "re-", "meaning": "再次、返回 (again/back)", "cost": 1 },
+    { "id": "con", "type": "prefix", "text": "con-", "meaning": "共同、一起 (together)", "cost": 1 },
+    { "id": "over", "type": "prefix", "text": "over-", "meaning": "过度、超越 (over/beyond)", "cost": 1 }
+  ],
+  "roots": [
+    { "id": "port", "type": "root", "text": "port", "meaning": "携带、运送 (carry)", "cost": 1 },
+    { "id": "struct", "type": "root", "text": "struct", "meaning": "建造 (build)", "cost": 1 },
+    { "id": "act", "type": "root", "text": "act", "meaning": "行动；举动 (act)", "cost": 1 }
+  ],
+  "suffixes": [
+    { "id": "able", "type": "suffix", "text": "-able", "meaning": "能够…的 (capable of)", "cost": 0 },
+    { "id": "ion", "type": "suffix", "text": "-ion", "meaning": "名词化；动作/结果 (noun-forming)", "cost": 1 },
+    { "id": "ure", "type": "suffix", "text": "-ure", "meaning": "动作、过程、结果 (process/result)", "cost": 1 },
+    { "id": "power", "type": "suffix", "text": "-power", "meaning": "力量打击 (power strike)", "cost": 1 },
+    { "id": "see", "type": "suffix", "text": "-see", "meaning": "观看意图 (peek intent)", "cost": 1 }
+  ],
+  "starterDeck": [
+    { "ref": "re", "kind": "prefix" },
+    { "ref": "con", "kind": "prefix" },
+    { "ref": "over", "kind": "prefix" },
+    { "ref": "port", "kind": "root" },
+    { "ref": "struct", "kind": "root" },
+    { "ref": "able", "kind": "suffix" },
+    { "ref": "ion", "kind": "suffix" },
+    { "ref": "ure", "kind": "suffix" },
+    { "ref": "power", "kind": "suffix" },
+    { "ref": "see", "kind": "suffix" }
+  ]
+}

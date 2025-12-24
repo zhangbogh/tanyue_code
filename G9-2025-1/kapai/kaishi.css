@@ -1,0 +1,50 @@
+/* 开始页面覆盖层 */
+.start-screen {
+  position: fixed; inset: 0; z-index: 9999;
+  display: grid; place-items: center;
+  overflow: hidden;
+}
+.start-screen::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image: url("styles/kaishibeijing.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center calc(50% + 5px);
+  transform: scale(1);
+  transform-origin: center;
+}
+.start-content { text-align: center; animation: startRise 700ms ease-out both; }
+.start-title { font-size: 42px; margin: 0 0 8px; color: var(--danger); text-shadow: 0 2px 0 #fff; }
+.subtitle { margin: 0 0 16px; color: #7a5a3a; font-weight: 700; }
+.start-btn { font-size: 18px; padding: 10px 18px; border-radius: 12px; border: 2px solid #e0c080; background: var(--accent); font-weight: 800; cursor: pointer; box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
+.start-btn:hover { filter: brightness(1.06); transform: translateY(-2px); }
+.hint { font-size: 12px; color: #7a5a3a; margin-top: 8px; opacity: 0.8; }
+.start-decor { position: absolute; border-radius: 50%; filter: blur(40px); opacity: 0.35; }
+.start-decor-1 { width: 420px; height: 420px; background: radial-gradient(circle, #ffd59e, #ffb347); left: -80px; top: -60px; animation: decorDrift 8s ease-in-out infinite; }
+.start-decor-2 { width: 360px; height: 360px; background: radial-gradient(circle, #f6a5d8, #ffd1f1); right: -60px; bottom: -40px; animation: decorDrift 9s ease-in-out infinite reverse; }
+
+/* 开始页面淡出 */
+.start-screen.exit { animation: exitHold 3s linear forwards; }
+.start-screen.exit::after { animation: darken 3s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+.start-screen::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0);
+}
+/* 跳段：强制结束暗化为全黑，且不再播放动画 */
+.start-screen.force-dark { animation: none !important; }
+.start-screen.force-dark::after { animation: none !important; background: rgba(0,0,0,1) !important; }
+
+@keyframes startRise { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes decorDrift { 0% { transform: translate(0,0) scale(1); } 50% { transform: translate(10px,-12px) scale(1.05); } 100% { transform: translate(0,0) scale(1); } }
+@keyframes exitHold { from { opacity: 1; } to { opacity: 1; } }
+@keyframes darken {
+  0% { background: rgba(0,0,0,0); }
+  15% { background: rgba(0,0,0,0.08); }
+  45% { background: rgba(0,0,0,0.42); }
+  100% { background: rgba(0,0,0,1); }
+}
+/* 关卡标题（开始阶段） */
+.start-level-banner { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); font-size: 200px; font-weight: 900; color: #ffc107; text-shadow: 0 3px 0 #000, 0 0 24px rgba(0,0,0,0.5); opacity: 0; animation: levelAppear 2s ease-in-out forwards; z-index: 10000; white-space: nowrap; font-family: "ShangShouGeTeTi-2", sans-serif; }
+@keyframes levelAppear { 0% { opacity: 0; transform: translate(-50%, -50%) scale(0.96); } 15% { opacity: 1; transform: translate(-50%, -50%) scale(1.06); } 60% { opacity: 1; transform: translate(-50%, -50%) scale(1.02); } 100% { opacity: 0.2; transform: translate(-50%, -50%) scale(1.0); } }

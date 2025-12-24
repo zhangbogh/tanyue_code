@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>音效测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #status {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>音效播放测试</h1>
+    <p>测试文件路径: c:\逃离校园 - 副本\飞书20251201-160841.mp3</p>
+    
+    <button id="playTestBtn">测试绝对路径播放</button>
+    <button id="playRelativeBtn">测试相对路径播放</button>
+    <button id="testGameSoundBtn">测试游戏中的音效函数</button>
+    
+    <div id="status">等待测试...</div>
+    
+    <script>
+        const statusDiv = document.getElementById('status');
+        
+        // 记录错误的函数
+        function logError(message, error) {
+            console.error(message, error);
+            statusDiv.textContent = message + ': ' + (error ? error.message : '未知错误');
+            statusDiv.style.backgroundColor = '#ffebee';
+        }
+        
+        // 记录成功的函数
+        function logSuccess(message) {
+            console.log(message);
+            statusDiv.textContent = message;
+            statusDiv.style.backgroundColor = '#e8f5e9';
+        }
+        
+        // 测试绝对路径播放
+        document.getElementById('playTestBtn').addEventListener('click', function() {
+            statusDiv.textContent = '正在尝试播放...';
+            statusDiv.style.backgroundColor = '#fff8e1';
+            
+            try {
+                // 注意：在浏览器中，直接使用Windows绝对路径可能会失败
+                // 这里只是演示尝试
+                const audio = new Audio('file:///C:/逃离校园%20-%20副本/飞书20251201-160841.mp3');
+                
+                audio.oncanplay = function() {
+                    logSuccess('音频已加载，可以播放');
+                };
+                
+                audio.onplay = function() {
+                    logSuccess('音频开始播放');
+                };
+                
+                audio.onended = function() {
+                    logSuccess('音频播放完毕');
+                };
+                
+                audio.onerror = function(e) {
+                    logError('音频播放失败', e);
+                };
+                
+                audio.play().catch(error => {
+                    logError('播放请求被拒绝', error);
+                });
+            } catch (error) {
+                logError('尝试播放时发生异常', error);
+            }
+        });
+        
+        // 测试相对路径播放
+        document.getElementById('playRelativeBtn').addEventListener('click', function() {
+            statusDiv.textContent = '正在尝试播放相对路径...';
+            statusDiv.style.backgroundColor = '#fff8e1';
+            
+            try {
+                const audio = new Audio('飞书20251201-160841.mp3');
+                
+                audio.oncanplay = function() {
+                    logSuccess('相对路径音频已加载，可以播放');
+                };
+                
+                audio.onplay = function() {
+                    logSuccess('相对路径音频开始播放');
+                };
+                
+                audio.onended = function() {
+                    logSuccess('相对路径音频播放完毕');
+                };
+                
+                audio.onerror = function(e) {
+                    logError('相对路径音频播放失败', e);
+                };
+                
+                audio.play().catch(error => {
+                    logError('相对路径播放请求被拒绝', error);
+                });
+            } catch (error) {
+                logError('尝试播放相对路径时发生异常', error);
+            }
+        });
+        
+        // 模拟游戏中的音效函数测试
+        document.getElementById('testGameSoundBtn').addEventListener('click', function() {
+            statusDiv.textContent = '测试游戏音效函数...';
+            statusDiv.style.backgroundColor = '#fff8e1';
+            
+            // 复制游戏中的playCorrectSound函数逻辑
+            function playCorrectSound() {
+                console.log('尝试播放正确答题音效...');
+                
+                // 主路径尝试
+                const audio1 = new Audio('c:\\逃离校园 - 副本\\飞书20251201-160841.mp3');
+                audio1.onerror = function() {
+                    console.log('主路径播放失败，尝试相对路径...');
+                    
+                    // 相对路径尝试
+                    const audio2 = new Audio('飞书20251201-160841.mp3');
+                    audio2.onerror = function() {
+                        logError('相对路径播放也失败', null);
+                        console.error('无法播放正确答题音效');
+                    };
+                    audio2.onplay = function() {
+                        logSuccess('成功使用相对路径播放音效');
+                    };
+                    audio2.play().catch(err => {
+                        logError('相对路径播放请求被拒绝', err);
+                    });
+                };
+                audio1.onplay = function() {
+                    logSuccess('成功使用主路径播放音效');
+                };
+                
+                audio1.play().catch(err => {
+                    console.log('主路径播放请求被拒绝，尝试相对路径...');
+                    
+                    // 相对路径尝试
+                    const audio2 = new Audio('飞书20251201-160841.mp3');
+                    audio2.onerror = function() {
+                        logError('相对路径播放也失败', null);
+                    };
+                    audio2.onplay = function() {
+                        logSuccess('成功使用相对路径播放音效');
+                    };
+                    audio2.play().catch(err2 => {
+                        logError('相对路径播放请求被拒绝', err2);
+                    });
+                });
+            }
+            
+            playCorrectSound();
+        });
+    </script>
+</body>
+</html>

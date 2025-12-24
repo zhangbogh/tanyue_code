@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>逃离校园 - 开场动画</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100vw;
+            height: 100vh;
+            background-color: #000;
+            overflow: hidden;
+        }
+        video {
+            width: 100vw;
+            height: 100vh;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body>
+    <!-- 游戏开始视频 -->
+    <video id="gameStartVideo" autoplay playsinline>
+        <source src="head.mp4" type="video/mp4">
+        您的浏览器不支持视频播放。
+    </video>
+
+    <script>
+        // 视频播放控制脚本
+        (function() {
+            console.log('开始初始化视频播放系统');
+            
+            // 获取视频元素
+            const gameStartVideo = document.getElementById('gameStartVideo');
+            let retryTimer = null;
+            let retryCount = 0;
+            
+            // 视频播放完成后跳转到游戏页面
+        gameStartVideo.addEventListener('ended', function() {
+            console.log('视频播放完成，跳转到游戏页面');
+            window.location.href = 'game.html';
+        });
+            
+            // 尝试播放视频
+            function tryPlayVideo() {
+                console.log('尝试播放视频');
+                
+                // 检查视频是否已被隐藏
+                if (gameStartVideo.style.display === 'none') {
+                    console.log('视频已隐藏，跳过播放尝试');
+                    clearRetryTimer();
+                    return;
+                }
+                
+                // 检查视频是否正在播放
+                if (!gameStartVideo.paused) {
+                    console.log('视频正在播放，跳过播放尝试');
+                    clearRetryTimer();
+                    return;
+                }
+                
+                retryCount++;
+                console.log(`第 ${retryCount} 次尝试播放视频`);
+                
+                try {
+                    // 尝试播放视频
+                    const playPromise = gameStartVideo.play();
+                    
+                    if (playPromise !== undefined) {
+                        playPromise.then(() => {
+                            console.log('视频播放成功！');
+                            clearRetryTimer();
+                        }).catch(error => {
+                            console.error('视频播放失败:', error.message);
+                            
+                            // 如果是因为用户未交互导致的错误，不继续重试
+                            if (error.message.includes('user didn\'t interact')) {
+                                console.log('等待用户交互后再播放视频');
+                                clearRetryTimer();
+                                return;
+                            }
+                            
+                            // 其他错误情况下，继续尝试播放
+                            retryTimer = setTimeout(tryPlayVideo, 200);
+                        });
+                    } else {
+                        console.log('视频播放成功（旧浏览器）！');
+                        clearRetryTimer();
+                    }
+                } catch (error) {
+                    console.error('视频播放异常:', error.message);
+                    
+                    // 如果是因为用户未交互导致的错误，不继续重试
+                    if (error.message.includes('user didn\'t interact')) {
+                        console.log('等待用户交互后再播放视频');
+                        clearRetryTimer();
+                        return;
+                    }
+                    
+                    // 其他错误情况下，继续尝试播放
+                    retryTimer = setTimeout(tryPlayVideo, 200);
+                }
+            }
+            
+            // 清除重试定时器
+            function clearRetryTimer() {
+                if (retryTimer) {
+                    clearTimeout(retryTimer);
+                    retryTimer = null;
+                }
+            }
+            
+            // 用户交互处理函数
+            function handleUserInteraction() {
+                console.log('用户与页面交互，尝试播放视频');
+                tryPlayVideo();
+                
+                // 移除事件监听器，避免重复触发
+                document.removeEventListener('click', handleUserInteraction);
+                document.removeEventListener('touchstart', handleUserInteraction);
+                document.removeEventListener('keydown', handleUserInteraction);
+            }
+            
+            // 页面加载完成后初始化
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log('DOM内容加载完成，初始化视频播放系统');
+                
+                // 尝试自动播放视频
+                tryPlayVideo();
+                
+                // 添加用户交互事件监听器，解决浏览器自动播放限制
+                document.addEventListener('click', handleUserInteraction);
+                document.addEventListener('touchstart', handleUserInteraction);
+                document.addEventListener('keydown', handleUserInteraction);
+                document.addEventListener('mousedown', handleUserInteraction);
+                document.addEventListener('keypress', handleUserInteraction);
+            });
+            
+            // 页面变为可见时尝试播放
+            document.addEventListener('visibilitychange', function() {
+                if (document.visibilityState === 'visible' && gameStartVideo) {
+                    console.log('页面变为可见，尝试恢复视频播放');
+                    setTimeout(() => {
+                        if (gameStartVideo.style.display !== 'none' && gameStartVideo.paused) {
+                            console.log('页面可见且视频暂停，尝试播放');
+                            tryPlayVideo();
+                        }
+                    }, 100);
+                }
+            });
+            
+            // 窗口获得焦点时尝试播放
+            window.addEventListener('focus', function() {
+                if (gameStartVideo) {
+                    console.log('窗口获得焦点，尝试恢复视频播放');
+                    setTimeout(() => {
+                        if (gameStartVideo.style.display !== 'none' && gameStartVideo.paused) {
+                            console.log('窗口有焦点且视频暂停，尝试播放');
+                            tryPlayVideo();
+                        }
+                    }, 100);
+                }
+            });
+            
+            // 点击页面时尝试播放
+            document.addEventListener('click', function() {
+                if (gameStartVideo) {
+                    console.log('用户点击页面，尝试播放视频');
+                    if (gameStartVideo.style.display !== 'none' && gameStartVideo.paused) {
+                        tryPlayVideo();
+                    }
+                }
+            });
+            
+            // 按下键盘时尝试播放
+            document.addEventListener('keydown', function() {
+                if (gameStartVideo) {
+                    console.log('用户按下键盘，尝试播放视频');
+                    if (gameStartVideo.style.display !== 'none' && gameStartVideo.paused) {
+                        tryPlayVideo();
+                    }
+                }
+            });
+            
+        })();
+    </script>
+</body>
+</html>

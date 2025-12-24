@@ -1,0 +1,18 @@
+{
+  "words": [
+    { "prefix": "re", "root": "port", "suffix": null, "word": "report", "meaning": "报告；传达信息；从弃牌堆抽回2张", "damage": 0 },
+    { "prefix": null, "root": "port", "suffix": "able", "word": "portable", "meaning": "可携带的；便携的", "damage": 10 },
+    { "prefix": "con", "root": "struct", "suffix": "ion", "word": "construction", "meaning": "建造；建筑物", "damage": 12 },
+    { "prefix": null, "root": "struct", "suffix": "ion", "word": "struction", "meaning": "建造；架构（派生形式）", "damage": 0 },
+    { "prefix": null, "root": "struct", "suffix": "ure", "word": "structure", "meaning": "结构；构造", "damage": 0 },
+    { "prefix": null, "root": "port", "suffix": "ion", "word": "portion", "meaning": "（某物的）一部分；查看牌堆顶5张，选1入手，余弃；副作用：下回合少抽1张", "damage": 0 },
+    { "prefix": null, "root": "act", "suffix": "ion", "word": "action", "meaning": "行动；举动；造成15伤害", "damage": 15 },
+    { "prefix": "re", "root": "act", "suffix": "ion", "word": "reaction", "meaning": "反应；两回合内若受伤则对敌造成20，否则第三回合扣1能量", "damage": 0 },
+    { "prefix": "con", "root": "act", "suffix": null, "word": "conact", "meaning": "共同行动；造成12伤害并获得1点能量", "damage": 12 },
+    { "prefix": "over", "root": "struct", "suffix": null, "word": "overstruct", "meaning": "过度建造；获得8点护盾并下回合多抽1张牌", "damage": 0 }
+  ],
+  "specialWords": [
+    { "prefix": "over", "root": null, "suffix": "power", "word": "overpower", "effectText": "造成 20 点伤害（10% 失败）" },
+    { "prefix": "over", "root": null, "suffix": "see", "word": "oversee", "effectText": "预告敌人 5 回合意图（10% 失败）" }
+  ]
+}

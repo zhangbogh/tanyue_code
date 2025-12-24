@@ -1,0 +1,25 @@
+{
+  "character": {
+    "collision": {
+      "width": 35,
+      "height":75,
+      "x": 170,
+        "y": 465
+    },
+    "movement": {
+      "speed": 5,
+      "horizontalSpeed": 4,
+      "jumpForce": 15,
+      "gravity": 1
+    },
+    "animation": {
+      "frameDelay": {
+        "idle": 10,
+        "walk": 3
+      }
+    },
+    "sprite": {
+      "offsetY": -27
+    }
+  }
+}

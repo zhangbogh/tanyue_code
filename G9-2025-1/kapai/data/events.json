@@ -1,0 +1,111 @@
+{
+  "events": [
+    {
+      "id": "etymology_spring",
+      "title": "词源之泉",
+      "image": "styles/events/quanshui.png",
+      "body": "你发现了一口散发着微光的泉水，泉底似乎沉淀着无数破碎的字母。泉水旁刻着一行小字：“饮者获知，捞者得器。”",
+      "options": [
+        { "text": "饮用：恢复 30% HP", "action": "heal_30" },
+        { "text": "打捞：获得 1 张随机牌", "action": "get_random_card" },
+        { "text": "离开", "action": "leave" }
+      ]
+    },
+    {
+      "id": "forgotten_library",
+      "title": "被遗忘的图书馆",
+      "image": "styles/events/tushuguan.png",
+      "body": "你看见了一座古老的图书馆，大门半掩。里面传来书页翻动的声音，仿佛有人在等待访客。",
+      "options": [
+        { "text": "寻找秘卷：获得 1 张强力牌，但失去 10% HP", "action": "trade_hp_rare" },
+        { "text": "离开", "action": "leave" }
+      ]
+    },
+    {
+      "id": "wandering_merchant",
+      "title": "流浪词商",
+      "image": "styles/events/shangren.png",
+      "body": "一个背着巨大行囊的商人拦住了你的去路。“想要买点什么吗？或者……卖点什么？”",
+      "options": [
+        { "text": "购买补给：花费 50 金币恢复 20 HP", "action": "buy_heal" },
+        { "text": "交换知识：移除 1 张牌", "action": "remove_card" },
+        { "text": "离开", "action": "leave" }
+      ]
+    },
+    {
+      "id": "ancient_altar",
+      "title": "远古祭坛",
+      "image": "styles/events/jitan.png",
+      "body": "一座布满青苔的祭坛，上面摆放着奇怪的贡品。空气中弥漫着古老的魔力。",
+      "options": [
+        { "text": "献祭：失去 10 HP，移除 1 张牌", "action": "sacrifice_hp_remove" },
+        { "text": "祈祷：恢复 15 HP", "action": "pray_heal" },
+        { "text": "离开", "action": "leave" }
+      ]
+    },
+    {
+      "id": "misty_crossroad",
+      "title": "迷雾十字路口",
+      "image": "styles/events/shizilukou.png",
+      "body": "前方道路被浓雾笼罩，隐约有两条路。左边传来微弱的亮光，右边则是深邃的黑暗。",
+      "options": [
+        { "text": "冲向左边：失去 5 HP，获得 1 张前缀牌", "action": "rush_prefix" },
+        { "text": "冲向右边：失去 5 HP，获得 1 张后缀牌", "action": "rush_suffix" },
+        { "text": "原地休息：恢复 10 HP", "action": "rest_small" }
+      ]
+    },
+    {
+      "id": "mad_scribe",
+      "title": "疯狂抄写员",
+      "image": "styles/events/fengkuangchaoxieyuan.png",
+      "body": "一个衣衫褴褛的人正在疯狂地在墙上写字，嘴里念念有词：“不够……还不够……更多的词汇……”",
+      "options": [
+        { "text": "观察：获得 1 张随机牌", "action": "observe_get_card" },
+        { "text": "抢夺笔：失去 5 HP，获得 2 张随机牌", "action": "rob_scribe" },
+        { "text": "离开", "action": "leave" }
+      ]
+    },
+    {
+      "id": "golden_idol",
+      "title": "黄金雕像",
+      "image": "styles/events/huangjindiaoxiang.png",
+      "body": "你发现了一个金光闪闪的字母雕像，看起来很值钱，但周围似乎布置了某种防御机关。",
+      "options": [
+        { "text": "拿走：获得 100 金币，失去 10 HP", "action": "take_gold_pain" },
+        { "text": "离开", "action": "leave" }
+      ]
+    },
+    {
+      "id": "cursed_book",
+      "title": "诅咒之书",
+      "image": "styles/events/zuzhouzhishu.png",
+      "body": "一本散发着黑气的书漂浮在半空中，书页自动翻动，发出诡异的沙沙声。",
+      "options": [
+        { "text": "阅读：失去 5 HP，获得 1 张强力牌", "action": "read_curse" },
+        { "text": "烧毁：移除 1 张牌，失去 5 HP", "action": "burn_book" },
+        { "text": "离开", "action": "leave" }
+      ]
+    },
+    {
+      "id": "mysterious_pill",
+      "title": "神秘药丸",
+      "image": "styles/events/shenmiyaowan.png",
+      "body": "一张小桌子上放着红蓝两颗药丸，旁边没有说明，只有一张笑脸纸条。",
+      "options": [
+        { "text": "红药丸：恢复全部 HP，失去 50 金币", "action": "red_pill" },
+        { "text": "蓝药丸：获得 3 张随机牌，失去 15 HP", "action": "blue_pill" },
+        { "text": "都不吃", "action": "leave" }
+      ]
+    },
+    {
+      "id": "gambler",
+      "title": "赌徒",
+      "image": "styles/events/dutu.png",
+      "body": "阴影中坐着一个看不清面容的人。“来一把吗？赢了拿走这张牌，输了留下你的血。”",
+      "options": [
+        { "text": "赌一把：50% 获得 1 张牌，50% 失去 10 HP", "action": "gamble_5050" },
+        { "text": "离开", "action": "leave" }
+      ]
+    }
+  ]
+}
