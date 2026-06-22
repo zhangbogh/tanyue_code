@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>节奏游戏 - 第二关</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #000;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+        
+        #gameContainer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            border-radius: 0;
+            box-shadow: none;
+            overflow: hidden;
+        }
+        
+        #topVideo {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: auto;
+            z-index: 0;
+        }
+        
+        #topVideo video {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            display: block;
+        }
+        
+        #bottomImage {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: auto;
+            z-index: 1;
+        }
+        
+        #bottomImage video {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            display: block;
+        }
+        
+        #musicLine {
+            position: absolute;
+            bottom: 150px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90vw;
+            max-width: 1026px;
+            height: auto;
+            z-index: 2;
+        }
+        
+        #musicLine video {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            display: block;
+        }
+        
+        #character {
+            position: absolute;
+            left: 50%;
+            bottom: 150px;
+            transform: translateX(-50%);
+            width: 35vw;
+            max-width: 300px;
+            height: auto;
+            z-index: 10;
+        }
+        
+        #character video {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+        
+        #hitZone {
+            position: absolute;
+            left: 50%;
+            bottom: 150px;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 200px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 150px 150px 0 0;
+            border-bottom: none;
+            z-index: 11;
+            transition: all 0.1s;
+        }
+        
+        #hitZone.success {
+            border-color: #00ff88;
+            box-shadow: 0 -10px 30px #00ff88, 0 -10px 60px #00ff88, inset 0 10px 30px rgba(0, 255, 136, 0.2);
+        }
+        
+        #hitZone.good {
+            border-color: #ffcc00;
+            box-shadow: 0 -10px 30px #ffcc00, 0 -10px 60px #ffcc00, inset 0 10px 30px rgba(255, 204, 0, 0.2);
+        }
+        
+        #hitZone.fail {
+            border-color: #ff4466;
+            box-shadow: 0 -10px 30px #ff4466, 0 -10px 60px #ff4466, inset 0 10px 30px rgba(255, 68, 102, 0.2);
+        }
+        
+        #hitZone::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 260px;
+            height: 180px;
+            border: 1px dashed rgba(255, 255, 255, 0.15);
+            border-radius: 130px 130px 0 0;
+            border-bottom: none;
+        }
+        
+        .beatCircle {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 50%;
+            box-shadow: 0 0 20px #00d4ff;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 5;
+        }
+        
+        .beatCircle.hit {
+            box-shadow: 0 0 30px #00ff88;
+            animation: hitEffect 0.3s ease-out forwards;
+        }
+        
+        .beatCircle.miss {
+            box-shadow: 0 0 30px #ff4466;
+            animation: missEffect 0.3s ease-out forwards;
+        }
+        
+        @keyframes hitEffect {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
+        }
+        
+        @keyframes missEffect {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+        }
+        
+        #scoreBoard {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: #fff;
+            font-size: 24px;
+            text-shadow: 0 0 10px rgba(0, 200, 255, 0.5);
+            z-index: 20;
+        }
+        
+        #combo {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #ffcc00;
+            font-size: 28px;
+            font-weight: bold;
+            text-shadow: 0 0 15px rgba(255, 200, 0, 0.7);
+            z-index: 20;
+        }
+        
+        #progressBar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #00d4ff, #00ff88);
+            width: 0%;
+            z-index: 15;
+            transition: width 0.1s linear;
+        }
+        
+        #feedback {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            font-weight: bold;
+            pointer-events: none;
+            z-index: 25;
+            opacity: 0;
+            text-shadow: 0 0 20px currentColor;
+        }
+        
+        #feedback.show {
+            animation: feedbackAnim 0.5s ease-out forwards;
+        }
+        
+        @keyframes feedbackAnim {
+            0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -80%) scale(1.5); }
+        }
+        
+        .perfect { color: #00ff88; }
+        .good { color: #ffcc00; }
+        .miss { color: #ff4466; }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <div id="topVideo">
+            <video id="topVideoElement" muted>
+                <source src="f4e5308551554f5de713637dc2bdd621.mp4" type="video/mp4">
+                您的浏览器不支持视频播放
+            </video>
+        </div>
+        <div id="scoreBoard">得分: <span id="score">0</span></div>
+        <div id="combo">连击: <span id="comboCount">0</span></div>
+        
+        <div id="bottomImage">
+            <video id="bottomVideoElement" loop muted>
+                <source src="3月19日.mp4" type="video/mp4">
+                您的浏览器不支持视频播放
+            </video>
+        </div>
+        
+        <div id="musicLine">
+            <video id="musicLineVideoElement" loop muted>
+                <source src="3月19日.mov" type="video/quicktime">
+                您的浏览器不支持视频播放
+            </video>
+        </div>
+        
+        <div id="hitZone"></div>
+        
+        <div id="character">
+            <video id="characterVideoElement" loop muted>
+                <source src="3509bbaeefcfeed2e3f39540cb028656.mp4" type="video/mp4">
+                您的浏览器不支持视频播放
+            </video>
+        </div>
+        
+        <div id="progressBar"></div>
+        <div id="feedback"></div>
+        
+        <!-- 跳过按钮 -->
+        <button id="skipBtn" style="display: none; position: absolute; top: 20px; left: 200px; padding: 10px 20px; font-size: 16px; background: linear-gradient(145deg, #ff6600, #cc5500); border: none; border-radius: 20px; color: #fff; cursor: pointer; z-index: 20;">跳过</button>
+        
+        <!-- 游戏结束界面 -->
+        <div id="gameOverScreen" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); flex-direction: column; align-items: center; justify-content: center; z-index: 100;">
+            <h1 style="color: #00d4ff; font-size: 36px; margin-bottom: 20px; text-shadow: 0 0 20px #00d4ff;">🎵 游戏结束!</h1>
+            <p style="color: #aaa; font-size: 16px; margin-bottom: 30px; text-align: center; line-height: 1.8;">
+                最终得分: <strong style="color: #00ff88; font-size: 36px;">0</strong><br><br>
+                最大连击: <strong style="color: #ffcc00;">0</strong>
+            </p>
+            <p style="color: #fff; font-size: 18px; margin-top: 20px; text-align: center;">
+                恭喜完成第二关！<br>
+                感谢您的参与！
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        const gameContainer = document.getElementById('gameContainer');
+        const character = document.getElementById('character');
+        const hitZone = document.getElementById('hitZone');
+        const scoreDisplay = document.getElementById('score');
+        const comboDisplay = document.getElementById('comboCount');
+        const progressBar = document.getElementById('progressBar');
+        const feedbackEl = document.getElementById('feedback');
+        
+        // 视频元素引用
+        const topVideoElement = document.getElementById('topVideoElement');
+        const bottomVideoElement = document.getElementById('bottomVideoElement');
+        const musicLineVideoElement = document.getElementById('musicLineVideoElement');
+        const characterVideoElement = document.getElementById('characterVideoElement');
+        const skipBtn = document.getElementById('skipBtn');
+        
+        let audioContext;
+        let analyser;
+        let audioSource;
+        let audioBuffer;
+        let isPlaying = false;
+        let score = 0;
+        let combo = 0;
+        let maxCombo = 0;
+        let beatCircles = [];
+        let gameStartTime = 0;
+        let animationId;
+        let currentBeatIndex = 0;
+        
+        let gameConfig = null;
+        
+        let CENTER_X = window.innerWidth / 2;
+        let CENTER_Y = window.innerHeight - 200;
+        
+        async function loadConfig() {
+            try {
+                const response = await fetch('beats_config_level2.json');
+                gameConfig = await response.json();
+                
+                console.log('配置加载成功:', gameConfig.songInfo.title);
+                console.log('节拍数量:', gameConfig.beats.length);
+                
+                return true;
+            } catch (error) {
+                console.error('配置加载失败:', error);
+                return false;
+            }
+        }
+        
+        async function initAudio() {
+            if (!gameConfig) {
+                alert('请先加载配置文件');
+                return;
+            }
+            
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            analyser = audioContext.createAnalyser();
+            analyser.fftSize = 2048;
+            
+            try {
+                const response = fetch(gameConfig.songInfo.audioFile);
+                const arrayBuffer = await (await response).arrayBuffer();
+                audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+                console.log('音频加载成功，时长:', audioBuffer.duration, '秒');
+            } catch (error) {
+                console.error('音频加载失败:', error);
+                alert('音频加载失败，请确保音频文件存在: ' + gameConfig.songInfo.audioFile);
+            }
+        }
+        
+        function startGame() {
+            if (!audioBuffer) {
+                alert('音频还在加载中，请稍候...');
+                return;
+            }
+            
+            score = 0;
+            combo = 0;
+            currentBeatIndex = 0;
+            updateScore();
+            updateCombo();
+            beatCircles = [];
+            
+            // 开始播放所有视频
+            if (topVideoElement) topVideoElement.play();
+            if (bottomVideoElement) bottomVideoElement.play();
+            if (musicLineVideoElement) musicLineVideoElement.play();
+            if (characterVideoElement) characterVideoElement.play();
+            
+            audioSource = audioContext.createBufferSource();
+            audioSource.buffer = audioBuffer;
+            audioSource.connect(analyser);
+            analyser.connect(audioContext.destination);
+            audioSource.start(0);
+            
+            isPlaying = true;
+            gameStartTime = audioContext.currentTime * 1000;
+            
+            // 显示跳过按钮
+            skipBtn.style.display = 'block';
+            
+            gameLoop();
+        }
+        
+        function gameLoop() {
+            if (!isPlaying) return;
+            
+            const currentTime = audioContext.currentTime * 1000;
+            const elapsedTime = currentTime - gameStartTime;
+            const progress = (elapsedTime / (audioBuffer.duration * 1000)) * 100;
+            progressBar.style.width = `${Math.min(progress, 100)}%`;
+            
+            while (currentBeatIndex < gameConfig.beats.length) {
+                const beat = gameConfig.beats[currentBeatIndex];
+                const spawnTime = beat.time - (gameConfig.settings.spawnDistance / gameConfig.settings.circleSpeed);
+                
+                if (elapsedTime >= spawnTime) {
+                    spawnBeatCircle(beat.direction);
+                    currentBeatIndex++;
+                } else {
+                    break;
+                }
+            }
+            
+            updateBeatCircles();
+            
+            if (progress >= 100) {
+                endGame();
+                return;
+            }
+            
+            animationId = requestAnimationFrame(gameLoop);
+        }
+        
+        function spawnBeatCircle(direction) {
+            const settings = gameConfig.settings;
+            let startX, startY, vx, vy;
+            
+            switch (direction) {
+                case 'top':
+                    startX = CENTER_X;
+                    startY = CENTER_Y - settings.spawnDistance;
+                    vx = 0;
+                    vy = settings.circleSpeed;
+                    break;
+                case 'bottom':
+                    startX = CENTER_X;
+                    startY = CENTER_Y + settings.spawnDistance;
+                    vx = 0;
+                    vy = -settings.circleSpeed;
+                    break;
+                case 'left':
+                    startX = CENTER_X - settings.spawnDistance;
+                    startY = CENTER_Y;
+                    vx = settings.circleSpeed;
+                    vy = 0;
+                    break;
+                case 'right':
+                    startX = CENTER_X + settings.spawnDistance;
+                    startY = CENTER_Y;
+                    vx = -settings.circleSpeed;
+                    vy = 0;
+                    break;
+            }
+            
+            const circle = document.createElement('div');
+            circle.className = 'beatCircle';
+            
+            // 随机选择使用音符.PNG或2j.PNG
+            const images = ['音符.PNG', '2j.PNG'];
+            const randomImage = images[Math.floor(Math.random() * images.length)];
+            circle.style.backgroundImage = `url('${randomImage}')`;
+            
+            circle.style.left = startX + 'px';
+            circle.style.top = startY + 'px';
+            gameContainer.appendChild(circle);
+            
+            beatCircles.push({
+                element: circle,
+                x: startX,
+                y: startY,
+                vx: vx,
+                vy: vy,
+                hit: false,
+                image: randomImage
+            });
+        }
+        
+        function updateBeatCircles() {
+            const settings = gameConfig.settings;
+            
+            for (let i = beatCircles.length - 1; i >= 0; i--) {
+                const circle = beatCircles[i];
+                circle.x += circle.vx;
+                circle.y += circle.vy;
+                circle.element.style.left = circle.x + 'px';
+                circle.element.style.top = circle.y + 'px';
+                
+                const distance = Math.sqrt(
+                    Math.pow(circle.x - CENTER_X, 2) + 
+                    Math.pow(circle.y - CENTER_Y, 2)
+                );
+                
+                if (distance < settings.hitZoneInnerRadius - 10 && !circle.hit) {
+                    circle.hit = true;
+                    circle.element.classList.add('miss');
+                    // 保持原始背景图片
+                    circle.element.style.backgroundImage = `url('${circle.image}')`;
+                    showFeedback('MISS', 'miss');
+                    combo = 0;
+                    updateCombo();
+                    hitZone.classList.add('fail');
+                    setTimeout(() => hitZone.classList.remove('fail'), 200);
+                    
+                    setTimeout(() => {
+                        if (circle.element.parentNode) {
+                            circle.element.parentNode.removeChild(circle.element);
+                        }
+                    }, 300);
+                    
+                    beatCircles.splice(i, 1);
+                }
+            }
+        }
+        
+        function checkHit() {
+            const settings = gameConfig.settings;
+            
+            for (let i = beatCircles.length - 1; i >= 0; i--) {
+                const circle = beatCircles[i];
+                if (circle.hit) continue;
+                
+                const distance = Math.sqrt(
+                    Math.pow(circle.x - CENTER_X, 2) + 
+                    Math.pow(circle.y - CENTER_Y, 2)
+                );
+                
+                if (distance >= settings.hitZoneInnerRadius && distance <= settings.hitZoneRadius + 15) {
+                    circle.hit = true;
+                    
+                    let points, feedbackText, feedbackClass;
+                    
+                    if (distance >= settings.hitZoneInnerRadius + 5 && distance <= settings.hitZoneRadius - 5) {
+                        points = 100;
+                        feedbackText = 'PERFECT!';
+                        feedbackClass = 'perfect';
+                    } else {
+                        points = 50;
+                        feedbackText = 'GOOD!';
+                        feedbackClass = 'good';
+                    }
+                    
+                    score += points * (1 + combo * 0.1);
+                    combo++;
+                    if (combo > maxCombo) maxCombo = combo;
+                    
+                    updateScore();
+                    updateCombo();
+                    showFeedback(feedbackText, feedbackClass);
+                    
+                    circle.element.classList.add('hit');
+                    // 保持原始背景图片
+                    circle.element.style.backgroundImage = `url('${circle.image}')`;
+                    if (feedbackClass === 'perfect') {
+                        hitZone.classList.add('success');
+                    } else {
+                        hitZone.classList.add('good');
+                    }
+                    setTimeout(() => {
+                        hitZone.classList.remove('success');
+                        hitZone.classList.remove('good');
+                    }, 200);
+                    
+                    setTimeout(() => {
+                        if (circle.element.parentNode) {
+                            circle.element.parentNode.removeChild(circle.element);
+                        }
+                    }, 300);
+                    
+                    beatCircles.splice(i, 1);
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        function showFeedback(text, className) {
+            feedbackEl.textContent = text;
+            feedbackEl.className = className + ' show';
+            setTimeout(() => {
+                feedbackEl.classList.remove('show');
+            }, 500);
+        }
+        
+        function updateScore() {
+            scoreDisplay.textContent = Math.floor(score);
+        }
+        
+        function updateCombo() {
+            comboDisplay.textContent = combo;
+            if (combo >= 10) {
+                comboDisplay.style.color = '#ff6600';
+            } else if (combo >= 5) {
+                comboDisplay.style.color = '#ffcc00';
+            } else {
+                comboDisplay.style.color = '#ffcc00';
+            }
+        }
+        
+        function endGame() {
+            isPlaying = false;
+            cancelAnimationFrame(animationId);
+            
+            // 隐藏跳过按钮
+            skipBtn.style.display = 'none';
+            
+            beatCircles.forEach(circle => {
+                if (circle.element.parentNode) {
+                    circle.element.parentNode.removeChild(circle.element);
+                }
+            });
+            beatCircles = [];
+            
+            // 显示游戏结束界面
+            const gameOverScreen = document.getElementById('gameOverScreen');
+            gameOverScreen.style.display = 'flex';
+            
+            // 更新得分显示
+            gameOverScreen.querySelector('p').innerHTML = `
+                最终得分: <strong style="color: #00ff88; font-size: 36px;">${Math.floor(score)}</strong><br><br>
+                最大连击: <strong style="color: #ffcc00;">${maxCombo}</strong>
+            `;
+            
+            // 结束游戏按钮
+            const endGameBtn = document.createElement('button');
+            endGameBtn.textContent = '结束游戏';
+            endGameBtn.style.cssText = 'padding: 15px 50px; font-size: 20px; background: linear-gradient(145deg, #ff6600, #cc5500); border: none; border-radius: 30px; color: #fff; cursor: pointer; margin: 10px;';
+            endGameBtn.addEventListener('click', () => {
+                window.location.href = 'rhythm_game.html';
+            });
+            
+            // 清除现有的按钮
+            const existingButtons = gameOverScreen.querySelectorAll('button');
+            existingButtons.forEach(btn => btn.remove());
+            
+            // 添加新按钮
+            gameOverScreen.appendChild(endGameBtn);
+        }
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && isPlaying) {
+                e.preventDefault();
+                checkHit();
+            }
+        });
+        
+        // 跳过按钮点击事件
+        skipBtn.addEventListener('click', () => {
+            // 停止音频
+            if (audioSource) {
+                try {
+                    audioSource.stop();
+                } catch (e) {
+                    console.log('音频已停止');
+                }
+            }
+            
+            // 暂停视频
+            if (topVideoElement) topVideoElement.pause();
+            if (bottomVideoElement) bottomVideoElement.pause();
+            if (musicLineVideoElement) musicLineVideoElement.pause();
+            if (characterVideoElement) characterVideoElement.pause();
+            
+            endGame();
+        });
+        
+        (async function init() {
+            const configLoaded = await loadConfig();
+            if (configLoaded) {
+                await initAudio();
+                startGame();
+            }
+        })();
+    </script>
+</body>
+</html>

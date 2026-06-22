@@ -1,0 +1,101 @@
+{
+    "levelName": "L1-1",
+    "items": [
+        {
+            "typeId": 5,
+            "useCell": true,
+            "cellX": -8,
+            "cellZ": -1,
+            "useWorld": false,
+            "worldX": 0.0,
+            "worldZ": 0.0,
+            "rot90Y": 1,
+            "yaw": 0.0,
+            "useGroundYOverride": false,
+            "groundY": 0.0,
+            "ignoreRules": true,
+            "overridePlacedItemFields": true,
+            "placedByLevel": true,
+            "state": 0,
+            "delay": 0,
+            "time_now": 0,
+            "has_active": false,
+            "is_on_top": false,
+            "contain": [
+                {
+                    "useLocation": false,
+                    "locX": 0,
+                    "locY": 0,
+                    "object_type": 0,
+                    "object_out": 0,
+                    "object_state": 0,
+                    "has_active": false
+                }
+            ]
+        },
+        {
+            "typeId": 5,
+            "useCell": true,
+            "cellX": -8,
+            "cellZ": -5,
+            "useWorld": false,
+            "worldX": 0.0,
+            "worldZ": 0.0,
+            "rot90Y": 1,
+            "yaw": 0.0,
+            "useGroundYOverride": false,
+            "groundY": 0.0,
+            "ignoreRules": true,
+            "overridePlacedItemFields": true,
+            "placedByLevel": true,
+            "state": 0,
+            "delay": 0,
+            "time_now": 0,
+            "has_active": false,
+            "is_on_top": false,
+            "contain": [
+                {
+                    "useLocation": false,
+                    "locX": 0,
+                    "locY": 0,
+                    "object_type": 1,
+                    "object_out": 0,
+                    "object_state": 0,
+                    "has_active": false
+                }
+            ]
+        },
+        {
+            "typeId": 6,
+            "useCell": true,
+            "cellX": 6,
+            "cellZ": -3,
+            "useWorld": false,
+            "worldX": 0.0,
+            "worldZ": 0.0,
+            "rot90Y": 3,
+            "yaw": 0.0,
+            "useGroundYOverride": false,
+            "groundY": 0.0,
+            "ignoreRules": true,
+            "overridePlacedItemFields": true,
+            "placedByLevel": true,
+            "state": 0,
+            "delay": 0,
+            "time_now": 0,
+            "has_active": false,
+            "is_on_top": false,
+            "contain": [
+                {
+                    "useLocation": false,
+                    "locX": 0,
+                    "locY": 0,
+                    "object_type": 0,
+                    "object_out": 1,
+                    "object_state": 0,
+                    "has_active": false
+                }
+            ]
+        }
+    ]
+}

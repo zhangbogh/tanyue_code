@@ -1,0 +1,39 @@
+{
+    "songInfo": {
+        "title": "3月13日",
+        "artist": "未知艺术家",
+        "bpm": 120,
+        "audioFile": "3月13日.mp3"
+    },
+    "settings": {
+        "circleSpeed": 2.5,
+        "spawnDistance": 450,
+        "hitZoneRadius": 150,
+        "hitZoneInnerRadius": 120
+    },
+    "beats": [
+        {"time": 2300, "direction": "top"},
+        {"time": 7100, "direction": "top"},
+        {"time": 11340, "direction": "left"},
+        {"time": 12440, "direction": "right"},
+        {"time": 16330, "direction": "top"},
+        {"time": 18860, "direction": "right"},
+        {"time": 21500, "direction": "left"},
+        {"time": 23450, "direction": "left"},
+        {"time": 26520, "direction": "left"},
+        {"time": 32470, "direction": "top"},
+        {"time": 33670, "direction": "top"},
+        {"time": 35300, "direction": "top"},
+        {"time": 38350, "direction": "left"},
+        {"time": 41530, "direction": "right"},
+        {"time": 43330, "direction": "right"},
+        {"time": 44560, "direction": "left"},
+        {"time": 46300, "direction": "top"},
+        {"time": 47350, "direction": "right"},
+        {"time": 48390, "direction": "top"},
+        {"time": 49460, "direction": "left"},
+        {"time": 52570, "direction": "top"},
+        {"time": 54420, "direction": "left"},
+        {"time": 70460, "direction": "right"}
+    ]
+}

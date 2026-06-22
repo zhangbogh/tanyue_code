@@ -1,0 +1,212 @@
+{
+    "songInfo": {
+        "title": "第二关音乐",
+        "artist": "未知艺术家",
+        "bpm": 120,
+        "audioFile": "第二关音乐.mp3"
+    },
+    "settings": {
+        "circleSpeed": 2.5,
+        "spawnDistance": 450,
+        "hitZoneRadius": 150,
+        "hitZoneInnerRadius": 120
+    },
+    "beats": [
+        {
+            "time": 3280,
+            "direction": "left"
+        },
+        {
+            "time": 5230,
+            "direction": "top"
+        },
+        {
+            "time": 6080,
+            "direction": "top"
+        },
+        {
+            "time": 7120,
+            "direction": "top"
+        },
+        {
+            "time": 8040,
+            "direction": "right"
+        },
+        {
+            "time": 8290,
+            "direction": "top"
+        },
+        {
+            "time": 10080,
+            "direction": "right"
+        },
+        {
+            "time": 11120,
+            "direction": "right"
+        },
+        {
+            "time": 11260,
+            "direction": "top"
+        },
+        {
+            "time": 12140,
+            "direction": "right"
+        },
+        {
+            "time": 13100,
+            "direction": "left"
+        },
+        {
+            "time": 14000,
+            "direction": "top"
+        },
+        {
+            "time": 14220,
+            "direction": "left"
+        },
+        {
+            "time": 15160,
+            "direction": "top"
+        },
+        {
+            "time": 17000,
+            "direction": "right"
+        },
+        {
+            "time": 18070,
+            "direction": "top"
+        },
+        {
+            "time": 20130,
+            "direction": "right"
+        },
+        {
+            "time": 21170,
+            "direction": "left"
+        },
+        {
+            "time": 24170,
+            "direction": "right"
+        },
+        {
+            "time": 26040,
+            "direction": "top"
+        },
+        {
+            "time": 26290,
+            "direction": "left"
+        },
+        {
+            "time": 27220,
+            "direction": "right"
+        },
+        {
+            "time": 28210,
+            "direction": "right"
+        },
+        {
+            "time": 29110,
+            "direction": "top"
+        },
+        {
+            "time": 30010,
+            "direction": "right"
+        },
+        {
+            "time": 30210,
+            "direction": "left"
+        },
+        {
+            "time": 31120,
+            "direction": "top"
+        },
+        {
+            "time": 32030,
+            "direction": "top"
+        },
+        {
+            "time": 33050,
+            "direction": "right"
+        },
+        {
+            "time": 34250,
+            "direction": "right"
+        },
+        {
+            "time": 35190,
+            "direction": "top"
+        },
+        {
+            "time": 36160,
+            "direction": "left"
+        },
+        {
+            "time": 38220,
+            "direction": "right"
+        },
+        {
+            "time": 39170,
+            "direction": "left"
+        },
+        {
+            "time": 40080,
+            "direction": "top"
+        },
+        {
+            "time": 41170,
+            "direction": "right"
+        },
+        {
+            "time": 42110,
+            "direction": "top"
+        },
+        {
+            "time": 43160,
+            "direction": "right"
+        },
+        {
+            "time": 44170,
+            "direction": "right"
+        },
+        {
+            "time": 45180,
+            "direction": "right"
+        },
+        {
+            "time": 46170,
+            "direction": "right"
+        },
+        {
+            "time": 47290,
+            "direction": "right"
+        },
+        {
+            "time": 49100,
+            "direction": "right"
+        },
+        {
+            "time": 51280,
+            "direction": "right"
+        },
+        {
+            "time": 52200,
+            "direction": "top"
+        },
+        {
+            "time": 53110,
+            "direction": "left"
+        },
+        {
+            "time": 55270,
+            "direction": "top"
+        },
+        {
+            "time": 57170,
+            "direction": "top"
+        },
+        {
+            "time": 59010,
+            "direction": "left"
+        }
+    ]
+}
