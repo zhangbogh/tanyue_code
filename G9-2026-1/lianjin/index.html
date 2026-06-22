@@ -1,0 +1,209 @@
+    <!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>化学炼金术士</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚗️</text></svg>">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <audio id="bgm" src="1.mp3" loop></audio>
+    <audio id="reagent-sound" src="images/新录音 75.m4a"></audio>
+    <div class="video-intro" id="video-intro">
+        <video id="intro-video" playsinline style="width: 100%; height: 100%; object-fit: cover;">
+            <source src="images/43_8.mp4" type="video/mp4">
+        </video>
+        <!-- 跳过按钮 -->
+        <div class="video-skip-button" onclick="skipVideo()">
+            跳过视频
+        </div>
+    </div>
+
+    <div class="level-intro hidden" id="level-intro">
+        <div class="level-intro-content">
+            <div class="intro-scene">🏰</div>
+            <h1>第一关：后花园</h1>
+            <p>欢迎来到你的炼金实验室！作为新手上路，你需要先前往后花园收集基础材料。</p>
+            <p><strong>任务目标：</strong>前往后花园采集 <span style="color: #f39c12;">碳酸钙</span></p>
+            <button class="btn btn-success" onclick="startGame()" style="font-size: 18px; padding: 15px 40px;">开始探索</button>
+        </div>
+    </div>
+
+    <div class="game-container">
+        <div class="header">
+            <h1>⚗️ 化学炼金术士</h1>
+            <div class="player-stats">
+                <button class="btn btn-danger" id="customer-btn-header" onclick="openCustomerModal()" style="margin-right: 10px;">
+                    <span>👥</span> 顾客需求
+                    <span class="customer-badge" id="customer-badge-header" style="display: none;">0</span>
+                </button> 
+                <div class="stat-item">
+                    <span class="stat-icon">🪙</span>
+                    <span>金币: <span class="stat-value" id="gold">100</span></span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon">⭐</span>
+                    <span>经验: <span class="stat-value" id="experience">0</span></span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon">📊</span>
+                    <span>等级: <span class="stat-value" id="level">1</span> <span id="level-name">(学徒)</span></span>
+                </div>
+                <button class="btn btn-warning" onclick="openShop()">🛒 商城</button>
+                <button class="btn btn-primary" id="scene-toggle-btn" onclick="toggleScene()">🌸 后花园</button>
+            </div>
+        </div>
+
+        <div class="scene active" id="lab-scene">
+            <div class="lab-top-section">
+                <div class="panel resources-panel">
+                    <div class="panel-title">
+                        <span>🎒</span> 资源仓库
+                        <span style="font-size: 12px; color: #aaa; margin-left: auto;">💡 拖拽材料到烧瓶</span>
+                    </div>
+                    <div class="material-list" id="material-list"></div>
+                </div>
+            </div>
+            
+            <div class="lab-main-content">
+                <div class="lab-left-section">
+                    <div class="panel">
+                        <div class="panel-title">
+                            <span>⚗️</span> 炼制台
+                        </div>
+                        <div class="reaction-chamber">
+                            <div class="reaction-chamber-title" id="current-recipe-title">选择配方开始炼制</div>
+                            
+                            <div class="alchemy-workspace">
+                                <div class="alcohol-lamp-area" id="alcohol-lamp-area">
+                                    <div class="alcohol-lamp" id="alcohol-lamp" draggable="true">
+                                        <img src="images/19.png" alt="酒精灯" style="width: 90px; height: 120px; object-fit: cover; position: relative; top: 0px;" />
+                                        <div class="lamp-flame" id="lamp-flame"></div>
+                                        <div class="lamp-wick" id="lamp-wick"></div>
+                                    </div>
+                                    <div class="match-box" id="match-box" draggable="true">
+                                        <span>🧨 火柴</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="reaction-column">
+                                    <div class="reaction-vessel" id="reaction-vessel">
+                                        <div class="reaction-liquid" id="reaction-liquid">
+                                            <div class="bubble" style="left: 20%; animation-delay: 0s;"></div>
+                                            <div class="bubble" style="left: 50%; animation-delay: 0.5s;"></div>
+                                            <div class="bubble" style="left: 70%; animation-delay: 1s;"></div>
+                                        </div>
+                                        <div class="reaction-flame" id="reaction-flame"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="hourglass-area" id="hourglass-area">
+                                    <div class="hourglass" id="hourglass" onclick="toggleHourglass()" style="cursor: pointer;">
+                                        <img src="images/18.png" alt="沙漏" class="hourglass-image"/>
+                                        <div class="hourglass-sand" id="hourglass-sand"></div>
+                                    </div>
+                                    <div class="hourglass-status" id="hourglass-status">准备就绪</div>
+                                </div>
+                            </div>
+                            
+                            <div class="instruction-drag">
+                                <span class="drag-hint">👇</span>
+                                <span>将材料拖拽到烧瓶中</span>
+                                <span class="drag-hint">👇</span>
+                            </div>
+                            <div class="added-reagents" id="added-reagents"></div>
+                            <div class="action-buttons hidden-when-lamp-inside">
+                                <button class="btn btn-danger" onclick="clearReaction()">🗑️ 清空</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lab-right-section">
+                    <div class="panel recipe-panel-compact">
+                        <div class="panel-title">
+                            <span>📋</span> 配方
+                        </div>
+                        <div class="tabs">
+                            <button class="tab-btn active" onclick="showRecipeCategory('basic')">基础</button>
+                            <button class="tab-btn" onclick="showRecipeCategory('advanced')">进阶</button>
+                        </div>
+                        <div class="recipe-list-compact" id="recipe-list"></div>
+                        <div class="recipe-image-container" id="recipe-image-full"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="npc-area">
+                <div class="panel-title" style="font-size: 14px;">
+                    <span>👥</span> 当前顾客
+                </div>
+                <div class="customer-list" id="customer-list" style="max-height: 200px; overflow-y: auto;"></div>
+            </div>
+        </div>
+
+        <div class="scene" id="garden-scene">
+            <div class="garden-scene">
+                <div class="garden-title" id="garden-title">🌸 后花园</div>
+                <div class="garden-task">
+                    <h3>📋 收集任务</h3>
+                    <p id="garden-task-desc">在花园中找到并收集 <strong>碳酸钙</strong></p>
+                    <p>已收集: <span id="collected-count">0</span> / <span id="required-count">3</span></p>
+                </div>
+                <button class="btn btn-primary back-btn" onclick="showRegionSelect()">🔙 返回区域选择</button>
+                <div id="collectibles"></div>
+            </div>
+        </div>
+
+        <div class="scene" id="region-scene">
+            <div class="region-scene">
+                <div class="region-title">🌍 选择探索区域</div>
+                <div class="region-grid" id="region-grid"></div>
+                <button class="btn btn-primary" onclick="goToLab()" style="margin-top: 30px;">🏠 返回实验室</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="shop-modal" id="shop-modal">
+        <div class="shop-content">
+            <div class="shop-header">
+                <span class="shop-title">🛒 商城</span>
+                <span class="shop-close" onclick="closeShop()">&times;</span>
+            </div>
+            <div class="shop-items" id="shop-items"></div>
+        </div>
+    </div>
+
+    <div class="customer-modal" id="customer-modal">
+        <div class="customer-modal-content">
+            <div class="customer-modal-header">
+                <span class="customer-modal-title">👥 顾客需求</span>
+                <span class="customer-modal-close" onclick="closeCustomerModal()">&times;</span>
+            </div>
+            <div class="customer-modal-body" id="customer-modal-body">
+            </div>
+            <button class="btn btn-danger" onclick="closeCustomerModal()">关闭</button>
+        </div>
+    </div>
+
+    <div class="modal" id="result-modal">
+        <div class="modal-content">
+            <div class="result-icon" id="result-icon"></div>
+            <div class="result-title" id="result-title"></div>
+            <div class="result-details" id="result-details"></div>
+            <button class="btn btn-primary" onclick="closeResultModal()">确定</button>
+        </div>
+    </div>
+
+    <div class="modal" id="npc-modal">
+        <div class="modal-content">
+            <div class="modal-title" id="npc-title"></div>
+            <div class="shop-items" id="npc-shop-items"></div>
+            <button class="btn btn-danger" onclick="closeNPCModal()" style="margin-top: 20px;">关闭</button>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
